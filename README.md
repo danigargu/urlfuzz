@@ -48,7 +48,7 @@ Download matching files with error code 200:
 
 ## THANKS
 
-Thanks to [mandingo](URL "https://twitter.com/m_ndingo") for the contribution of ideas during the development of the tool.
+Thanks to [mandingo](URL "https://twitter.com/m_ndingo") & [cgvwzq](URL "https://twitter.com/cgvwzq") for the ideas during the development of the tool.
 
 ## AUTHOR
 
