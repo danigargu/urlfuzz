@@ -1,0 +1,34 @@
+{
+  "name": "urlfuzz",
+  "version": "0.0.1",
+  "description": "HTTP/S fuzzer",
+  "main": "urlfuzz.js",
+  "author": "Daniel Garcia <danigargu[at]gmail.com>",
+  "repository": "",
+  "private": true,
+  "dependencies": {
+    "async": "^2.0.0-rc.6",
+    "colors": "^1.1.2",
+    "node-getopt": "^0.2.3",
+    "request": "^2.72.0",
+    "sprintf-js": "^1.0.3",
+    "event-stream": "^3.3.2",
+    "socks5-http-client": "^1.0.2",
+    "ya-csv": "^0.9.4",
+    "n-readlines": "^0.2.5",
+    "bluebird": "^3.4.1"
+  },
+  "keywords": [
+    "http",
+    "https",
+    "dirbuster",
+    "fuzz",
+    "fuzzing",
+    "bruteforce",
+    "fast"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "license": "GPL-3.0"
+}
