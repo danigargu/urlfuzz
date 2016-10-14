@@ -49,6 +49,7 @@ Download matching files with error code 200:
 `$ node urlfuzz.js http://localhost/file-#FUZZ#.exe -b 2:2:0123456789 --hc 200 -d samples/`
 
 Export results to a CSV file:
+
 `$ node urlfuzz.js http://localhost/#FUZZ# -w big.txt -r log`
 
 ## THANKS
