@@ -3,6 +3,8 @@
 ### DESCRIPTION
 Yep, this is another web fuzzer, but using the power of async/non-blocking I/O functions provided by NodeJS allowing you to perform VERY FAST web requests.
 
+
+
 #### Fuzzeable items
 
 * URL
@@ -46,9 +48,12 @@ Download matching files with error code 200:
 
 `$ node urlfuzz.js http://localhost/file-#FUZZ#.exe -b 2:2:0123456789 --hc 200 -d samples/`
 
+Export results to a CSV file:
+`$ node urlfuzz.js http://localhost/#FUZZ# -w big.txt -r log`
+
 ## THANKS
 
-Thanks to [mandingo](URL "https://twitter.com/m_ndingo") & [cgvwzq](URL "https://twitter.com/cgvwzq") for the ideas during the development of the tool.
+Thanks to [mandingo](https://twitter.com/m_ndingo) & [cgvwzq](https://twitter.com/cgvwzq) for the ideas during the development of the tool.
 
 ## AUTHOR
 
