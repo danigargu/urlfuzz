@@ -16,8 +16,9 @@ Yep, this is another web fuzzer, but using the power of async/non-blocking I/O f
 You may filter the responses by:
 
 * Error codes
-* Words
-* Lines
+* Nº Words
+* Nº Lines
+* Text
 
 #### Payloads
 
@@ -29,6 +30,34 @@ You may filter the responses by:
 Simply, install the dependences with:
 
  `$ npm install`
+
+## USAGE
+
+To get a list of all options and switches use:
+
+```
+$ node urlfuzz.js -h
+
+  -H, --headers=ARG+     set headers
+  -h, --head             use HEAD instead of GET
+  -d, --data=ARG         POST data (format: foo1=bar1&foo2=bar2)
+  -w, --wordlist=ARG     use a wordlist
+  -b, --bruteforce=ARG   perform bruteforce (format -> min:max:charset)
+  -o, --download=ARG     download results that matches (output dir)
+  -r, --results=ARG      exports results to file (format: csv)
+  -f, --hc=ARG           filter by error codes (comma separated)
+  -p, --proxy=ARG        use proxy (http://host:port)
+  -s, --socks=ARG        use socks (host:port)
+      --hw=ARG           filter by words (comma separated)
+      --hl=ARG           filter by lines (comma separated)
+      --ht=ARG           hide responses that matches str
+      --st=ARG           show responses that matches str
+      --max-sockets=ARG  max sockets (default: 150)
+      --timeout=ARG      timeout (default: X ms)
+  -x, --debug            debug mode
+  -h, --help             display this help
+
+```
 
 ## EXAMPLES
 
