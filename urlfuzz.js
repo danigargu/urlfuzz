@@ -58,6 +58,8 @@ function parse_args() {
     'hc': [],
     'hw': [],
     'hl': [],
+    'ht': null,
+    'st': null,
     'post_data': null,
     'bruteforce': null,
     'headers': null,
@@ -78,13 +80,15 @@ function parse_args() {
     ['d' , 'data=ARG'         , 'POST data (format: foo1=bar1&foo2=bar2)' ],
     ['w' , 'wordlist=ARG'     , 'use a wordlist'],
     ['b' , 'bruteforce=ARG'   , 'perform bruteforce (format -> min:max:charset)'],
-    ['o' , 'download=ARG'     , 'download pages (output dir)'],
+    ['o' , 'download=ARG'     , 'download results that matches (output dir)'],
     ['r' , 'results=ARG'      , 'exports results to file (format: csv)'],
     ['f' , 'hc=ARG'           , 'filter by error codes (comma separated)'],
     ['p' , 'proxy=ARG'        , 'use proxy (http://host:port)'],
     ['s' , 'socks=ARG'        , 'use socks (host:port)'],
     [''  , 'hw=ARG'           , 'filter by words (comma separated)'],
     [''  , 'hl=ARG'           , 'filter by lines (comma separated)'],
+    [''  , 'ht=ARG'           , 'hide responses that matches str'],
+    [''  , 'st=ARG'           , 'show responses that matches str'],
     [''  , 'max-sockets=ARG'  , 'max sockets (default: ' + config.max_sockets + ')'],
     [''  , 'timeout=ARG'      , 'timeout (default: X ms)'],
     ['x' , 'debug'            , 'debug mode'],
@@ -164,6 +168,8 @@ function parse_args() {
       
       case 'proxy':
       case 'results':
+      case 'ht':
+      case 'st':
         config[item] = args.options[item];
         break;
 
@@ -272,6 +278,12 @@ function process_response(args) {
 
     if (config.hl.indexOf(n_lines) == -1 && 
         config.hw.indexOf(n_words)) {
+    
+      if (config.ht && res.body.match(config.ht))
+        return
+
+      if (config.st && !res.body.match(config.st))
+        return
 
       var result = {
         n_words: n_words,
@@ -284,7 +296,7 @@ function process_response(args) {
       console.log(sprintf(LOG_FORMAT, get_colored_code(res.statusCode), 
                           n_lines, n_words, value))
 
-      config.cb_on_match.forEach(function(cb){
+      config.cb_on_match.forEach(function(cb) {
         cb(result)
       })
     }
@@ -442,7 +454,8 @@ function parse_postdata(data) {
   var vars = data.split("&");
   var len = vars.length;
 
-  if (!len) return null;
+  if (!len) 
+    return null;
 
   for (var i=0; i<len; i++) {
     var key_value = vars[i].split("=");
@@ -454,7 +467,8 @@ function parse_postdata(data) {
 function parse_headers(headers) {
   var parsed = {};
 
-  if (!headers) return null;
+  if (!headers)
+   return null;
   headers = headers.split("\n");
 
   for (var i=0; i<headers.length; i++) {
@@ -472,11 +486,12 @@ function parse_headers(headers) {
 try {
   console.log(LOGO.green)
   if (config = parse_args()) {
-    start_fuzzing();
+    start_fuzzing()
   }
 } catch(e) {
   console.log("[!] ERROR: ".yellow + e);
-  if (e.stack) console.log(e.stack);
+  if (e.stack) 
+    console.log(e.stack);
 }
 
 
