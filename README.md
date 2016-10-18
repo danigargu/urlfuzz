@@ -45,9 +45,9 @@ Usage: node urlfuzz.js <URL> [OPTIONS]
   -r, --range=ARG        fuzz with range (format -> start:end[:step])
   -o, --download=ARG     download results that matches (output dir)
   -x, --results=ARG      exports results to file (format: csv)
-  -f, --hc=ARG           filter by error codes (comma separated)
   -p, --proxy=ARG        use proxy (http://host:port)
   -s, --socks=ARG        use socks (host:port)
+      --hc=ARG           filter by error codes (comma separated)
       --hw=ARG           filter by words (comma separated)
       --hl=ARG           filter by lines (comma separated)
       --ht=ARG           hide responses that matches str
@@ -85,7 +85,7 @@ Fuzz a user-id with range option:
 
 Export results to a CSV file:
 
-`$ node urlfuzz.js http://localhost/#FUZZ# -w big.txt -r log`
+`$ node urlfuzz.js http://localhost/#FUZZ# -w big.txt -x log`
 
 ## THANKS
 
