@@ -3,8 +3,6 @@
 ### DESCRIPTION
 Yep, this is another web fuzzer, but using the power of async/non-blocking I/O functions provided by NodeJS allowing you to perform VERY FAST web requests.
 
-
-
 #### Fuzzeable items
 
 * URL
@@ -24,6 +22,7 @@ You may filter the responses by:
 
 * Wordlist
 * Bruteforce
+* Range
 
 ## INSTALL
 
@@ -36,15 +35,16 @@ Simply, install the dependences with:
 To get a list of all options and switches use:
 
 ```
-$ node urlfuzz.js -h
+Usage: node urlfuzz.js <URL> [OPTIONS]
 
   -H, --headers=ARG+     set headers
   -h, --head             use HEAD instead of GET
   -d, --data=ARG         POST data (format: foo1=bar1&foo2=bar2)
   -w, --wordlist=ARG     use a wordlist
   -b, --bruteforce=ARG   perform bruteforce (format -> min:max:charset)
+  -r, --range=ARG        fuzz with range (format -> start:end[:step])
   -o, --download=ARG     download results that matches (output dir)
-  -r, --results=ARG      exports results to file (format: csv)
+  -x, --results=ARG      exports results to file (format: csv)
   -f, --hc=ARG           filter by error codes (comma separated)
   -p, --proxy=ARG        use proxy (http://host:port)
   -s, --socks=ARG        use socks (host:port)
@@ -54,9 +54,11 @@ $ node urlfuzz.js -h
       --st=ARG           show responses that matches str
       --max-sockets=ARG  max sockets (default: 150)
       --timeout=ARG      timeout (default: X ms)
-  -x, --debug            debug mode
+      --debug            debug mode
   -h, --help             display this help
 
+Fuzzezable items: [url, headers, post_data]
+Fuzz tag: #FUZZ#
 ```
 
 ## EXAMPLES
@@ -65,17 +67,21 @@ Fuzz using a wordlist:
 
 `$ node urlfuzz.js http://localhost/#FUZZ# -w big.txt`
 
-Fuzz POST data using wordlist and filtering by words:
+Fuzz POST data using wordlist and filter by text:
 
-`$ node urlfuzz.js http://localhost/login.php -d "user=admin&pass=#FUZZ#" -w big.txt --hw 19`
+`$ node urlfuzz.js http://localhost/login.php -d "user=admin&pass=#FUZZ#" -w big.txt --ht denied`
 
-Fuzz 'User-agent' header and filtering by lines:
+Fuzz 'User-agent' header and filter by lines:
 
 `$ node urlfuzz.js http://localhost/exploit_kit.php -H "User-agent: #FUZZ#" -w user_agents.txt --hl 4`
 
 Download matching files with error code 200:
 
-`$ node urlfuzz.js http://localhost/file-#FUZZ#.exe -b 2:2:0123456789 --hc 200 -d samples/`
+`$ node urlfuzz.js http://localhost/file-#FUZZ#.exe -b 1:3:0123456789 --hc 200 -d samples/`
+
+Fuzz a user-id with range option:
+
+`$ node urlfuzz.js http://localhost/user.php?id=#FUZZ# -r 1:1000 --hc 200 --st Admin`
 
 Export results to a CSV file:
 

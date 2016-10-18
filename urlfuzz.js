@@ -50,6 +50,7 @@ const error_codes = {
 function parse_args() {
   var config = {
     'fuzz_key': null,
+    'fuzz_type': null,
     'debug': false,
     'url': null,
     'max_sockets': 150,
@@ -62,6 +63,7 @@ function parse_args() {
     'st': null,
     'post_data': null,
     'bruteforce': null,
+    'range': null,
     'headers': null,
     'download': null,
     'proxy': null,
@@ -80,8 +82,9 @@ function parse_args() {
     ['d' , 'data=ARG'         , 'POST data (format: foo1=bar1&foo2=bar2)' ],
     ['w' , 'wordlist=ARG'     , 'use a wordlist'],
     ['b' , 'bruteforce=ARG'   , 'perform bruteforce (format -> min:max:charset)'],
+    ['r' , 'range=ARG'        , 'fuzz with range (format -> start:end[:step])'],
     ['o' , 'download=ARG'     , 'download results that matches (output dir)'],
-    ['r' , 'results=ARG'      , 'exports results to file (format: csv)'],
+    ['x' , 'results=ARG'      , 'exports results to file (format: csv)'],
     ['f' , 'hc=ARG'           , 'filter by error codes (comma separated)'],
     ['p' , 'proxy=ARG'        , 'use proxy (http://host:port)'],
     ['s' , 'socks=ARG'        , 'use socks (host:port)'],
@@ -91,7 +94,7 @@ function parse_args() {
     [''  , 'st=ARG'           , 'show responses that matches str'],
     [''  , 'max-sockets=ARG'  , 'max sockets (default: ' + config.max_sockets + ')'],
     [''  , 'timeout=ARG'      , 'timeout (default: X ms)'],
-    ['x' , 'debug'            , 'debug mode'],
+    [''  , 'debug'            , 'debug mode'],
     ['h' , 'help'             , 'display this help']
   ]);
 
@@ -129,6 +132,7 @@ function parse_args() {
           throw 'The input wordlist does not exist';
 
         config[item] = wordlist;
+        config.fuzz_type = 'Wordlist'
         break;
 
       case 'timeout':
@@ -151,6 +155,29 @@ function parse_args() {
           'max': parseInt(brute_opts[1]),
           'charset': brute_opts[2]
         }
+        config.fuzz_type = 'Bruteforce'
+        break;
+
+      case 'range':
+        var range_opts = args.options[item].split(":");
+        var start, end, step;
+
+        if (range_opts.length != 2 && range_opts.length != 3)
+          throw "Invalid arguments for range option"
+        
+        start = parseInt(range_opts[0])
+        end   = parseInt(range_opts[1])
+        step  = range_opts.length == 3 ? parseInt(range_opts[2]) : 1
+
+        if (start >= end)
+          throw "Invalid arguments for range: start must be smaller than end"
+
+        config[item] = {
+          'start': start,
+          'end':   end,
+          'step':  step
+        }
+        config.fuzz_type = 'Range'
         break;
 
       case 'headers':
@@ -188,7 +215,7 @@ function parse_args() {
 
   find_fuzztag(config);
 
-  if (!config.wordlist && !config.bruteforce)
+  if (!config.wordlist && !config.bruteforce && !config.range)
     throw "Please, specify a fuzz type (wordlist or bruteforce)."
 
   return config;
@@ -250,6 +277,8 @@ function fuzz_iter(cb, end_cb) {
     brute.bruteforce(config.bruteforce, cb);
   else if (config.wordlist)
     read_wordlist_sync(config.wordlist, cb, end_cb);
+  else if (config.range)
+    range(config.range, cb);
   else
     throw 'Invalid fuzz iterator';
 }
@@ -356,7 +385,7 @@ function start_fuzzing() {
   if (s_filtered && s_filtered.length > 0)
     console.log(' Filtered    :' + s_filtered);
 
-  console.log(' Fuzz type   : ' + (config.wordlist ? 'Wordlist' : 'Bruteforce'));
+  console.log(' Fuzz type   : ' + config.fuzz_type);
 
   if (config.headers) {
     console.log(' Headers')
@@ -392,7 +421,7 @@ function start_fuzzing() {
           console.log(err.message + ' AT ' + value)
         })
     })
-  })  
+  })
 }
 
 function fuzz_url(value) {
@@ -422,7 +451,6 @@ function get_server_header() {
   })
 }
 
-
 function read_wordlist_async(filename, cb) {
   fs.createReadStream(config.wordlist).on('error', function() {
     cb(new Error('Error reading file'), null);
@@ -443,6 +471,11 @@ function read_wordlist_sync(filename, cb, end_cb) {
     end_cb()
 }
 
+function range(opts, cb) {
+  for (var i=opts.start; i<=opts.end; i+=opts.step)
+    cb(i);
+}
+
 function replace_all(str, find, replace) {
   return str.replace(new RegExp(find, 'g'), replace);
 }
@@ -450,12 +483,11 @@ function replace_all(str, find, replace) {
 function parse_postdata(data) {
   if (!data) return null; 
 
-  var res = {};
+  var res = {}
   var vars = data.split("&");
   var len = vars.length;
 
-  if (!len) 
-    return null;
+  if (!len) return null;
 
   for (var i=0; i<len; i++) {
     var key_value = vars[i].split("=");
@@ -465,10 +497,9 @@ function parse_postdata(data) {
 }
 
 function parse_headers(headers) {
-  var parsed = {};
+  var parsed = {}
 
-  if (!headers)
-   return null;
+  if (!headers) return null;
   headers = headers.split("\n");
 
   for (var i=0; i<headers.length; i++) {
@@ -493,5 +524,4 @@ try {
   if (e.stack) 
     console.log(e.stack);
 }
-
 
