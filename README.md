@@ -35,6 +35,12 @@ You may filter the responses by:
 npm i -g urlfuzz
 ```
 
+### Kali GNU/Linux
+
+```sh
+curl -sL https://raw.githubusercontent.com/danigargu/urlfuzz/master/artifacts/install/kali.sh | sudo bash -
+```
+
 ### FROM THE REPO
 
 ```sh
