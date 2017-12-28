@@ -45,9 +45,9 @@
     "dep-old-fix": "ncu -u",
     "lint": "eslint .",
     "pretest": "npm run lint && npm run dep-ok && npm run dep-sec",
-    "release-major": "release-it major",
-    "release-minor": "release-it minor",
-    "release-test": "release-it -d"
+    "release-major": "npm tst && release-it major",
+    "release-minor": "npm tst && release-it minor",
+    "release-test": "npm tst && release-it -d"
   },
   "license": "GPL-3.0",
   "devDependencies": {
