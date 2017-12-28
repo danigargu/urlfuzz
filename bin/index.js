@@ -520,6 +520,8 @@ function parse_headers(headers) {
 
 try {
   console.log(LOGO.green)
+  console.log(`Version: ${fuzzer.version}\n`)
+
   if (config = parse_args()) {
     start_fuzzing()
   }
