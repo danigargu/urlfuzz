@@ -62,6 +62,7 @@ Usage: urlfuzz <URL> [OPTIONS]
   -h, --head             use HEAD instead of GET
   -d, --data=ARG         POST data (format: foo1=bar1&foo2=bar2)
   -w, --wordlist=ARG     use a wordlist
+  -l, --lists            show available wordlists
   -b, --bruteforce=ARG   perform bruteforce (format -> min:max:charset)
   -r, --range=ARG        fuzz with range (format -> start:end[:step])
   -o, --download=ARG     download results that matches (output dir)

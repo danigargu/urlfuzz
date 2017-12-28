@@ -48,7 +48,7 @@ const error_codes = {
   500: {'color': colors.blue.bold,   'text': 'SrvError'}
 };
 
-function parse_args() {
+function parse_args(argsRaw) {
   var config = {
     'fuzz_key': null,
     'fuzz_type': null,
@@ -82,6 +82,7 @@ function parse_args() {
     ['h' , 'head'             , 'use HEAD instead of GET' ],
     ['d' , 'data=ARG'         , 'POST data (format: foo1=bar1&foo2=bar2)' ],
     ['w' , 'wordlist=ARG'     , 'use a wordlist'],
+    ['l' , 'lists'            , 'show available wordlists' ],
     ['b' , 'bruteforce=ARG'   , 'perform bruteforce (format -> min:max:charset)'],
     ['r' , 'range=ARG'        , 'fuzz with range (format -> start:end[:step])'],
     ['o' , 'download=ARG'     , 'download results that matches (output dir)'],
@@ -100,15 +101,15 @@ function parse_args() {
   ]);
 
   getopt.setHelp(
-    "Usage: node urlfuzz.js <URL> [OPTIONS]\n" +
+    "Usage: urlfuzz <URL> [OPTIONS]\n" +
     "\n" +
     "[[OPTIONS]]\n\n" +
     "Fuzzezable items: [url, headers, post_data]\n" +
     "Fuzz tag: " + FUZZ_TAG
   );
 
-  dbg('Passed args:', process.argv)
-  var args = getopt.parse(process.argv.slice(2));
+  dbg('Passed args:', argsRaw)
+  var args = getopt.parse(argsRaw);
   dbg('Parsed args:', args)
 
   config.url = args.argv[0];
@@ -131,14 +132,24 @@ function parse_args() {
         break;
 
       case 'wordlist':
-        var wordlist = args.options[item];
-        if (!fs.existsSync(wordlist))
+        const wordlist = args.options[item];
+        let filePath;
+
+        // If the user passes a built-in wordlist name.
+        if (utils.includes(fuzzer.lists, wordlist)) {
+          filePath = path.resolve(__dirname, '..', 'artifacts', 'lists', `${wordlist}.txt`);
+        } else {
+          // If the user passes a relative path we normalize it first.
+          filePath = path.resolve(process.cwd(), wordlist);
+        }
+
+        if (!fs.existsSync(filePath))
           throw 'The input wordlist does not exist';
 
-        config[item] = wordlist;
+        config[item] = filePath;
         config.fuzz_type = 'Wordlist'
         break;
-
+      
       case 'timeout':
       case 'max-sockets':
         config.max_sockets = parseInt(args.options[item]);
@@ -522,7 +533,16 @@ try {
   console.log(LOGO.green)
   console.log(`Version: ${fuzzer.version}\n`)
 
-  if (config = parse_args()) {
+  const argsRaw = process.argv.slice(2);
+  dbg('Starting ..., args:', argsRaw);
+
+  // TODO: Use a library that supports multiple commands, ie: yargs, commander, vorpal.
+  if(argsRaw[0] && utils.includes(['--lists', '-l'], argsRaw[0])) {
+    console.log(fuzzer.lists);
+    process.exit()  
+  }
+
+  if (config = parse_args(argsRaw)) {  
     start_fuzzing()
   }
 } catch(e) {
