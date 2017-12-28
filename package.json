@@ -7,7 +7,7 @@
     "https://github.com/danigargu/urlfuzz/graphs/contributors"
   ],
   "bin": {
-    "urlfuzz": "urlfuzz.js"
+    "urlfuzz": "bin/index.js"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,7 @@
     "fast"
   ],
   "scripts": {
-    "start": "node urlfuzz",
+    "start": "node bin",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "license": "GPL-3.0"

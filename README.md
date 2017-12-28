@@ -41,7 +41,7 @@ npm i -g urlfuzz
 git clone https://github.com/danigargu/urlfuzz
 cd urlfuzz
 npm i
-node index --help
+node bin
 ```
 
 ## USAGE
