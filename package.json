@@ -38,10 +38,18 @@
   ],
   "scripts": {
     "start": "node bin",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dep-ok": "depcheck --ignores supports-color",
+    "dep-sec": "nsp check",
+    "dep-old": "ncu",
+    "dep-old-fix": "ncu -u",
+    "pretest": "npm run dep-ok && npm run dep-sec"
   },
   "license": "GPL-3.0",
   "devDependencies": {
+    "depcheck": "^0.6.8",
+    "npm-check-updates": "^2.14.0",
+    "nsp": "^3.1.0",
     "supports-color": "^5.1.0"
   }
 }
