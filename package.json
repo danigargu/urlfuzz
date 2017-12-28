@@ -43,11 +43,16 @@
     "dep-sec": "nsp check",
     "dep-old": "ncu",
     "dep-old-fix": "ncu -u",
-    "pretest": "npm run dep-ok && npm run dep-sec"
+    "lint": "eslint .",
+    "pretest": "npm run lint && npm run dep-ok && npm run dep-sec"
   },
   "license": "GPL-3.0",
   "devDependencies": {
     "depcheck": "^0.6.8",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-json": "^1.2.0",
     "npm-check-updates": "^2.14.0",
     "nsp": "^3.1.0",
     "supports-color": "^5.1.0"
