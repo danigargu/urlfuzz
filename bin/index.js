@@ -1,7 +1,10 @@
 #!/usr/bin/env node
+
 //
 // URLfuzz - by danigargu
 //
+
+'use strict';
 
 var fs           = require('fs')
 var path         = require('path')
