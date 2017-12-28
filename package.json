@@ -15,15 +15,17 @@
   },
   "dependencies": {
     "async": "^2.0.0-rc.6",
+    "bluebird": "^3.4.1",
     "colors": "^1.1.2",
+    "debug": "^3.1.0",
+    "event-stream": "^3.3.2",
+    "lodash": "^4.17.4",
+    "n-readlines": "^0.2.5",
     "node-getopt": "^0.2.3",
     "request": "^2.72.0",
-    "sprintf-js": "^1.0.3",
-    "event-stream": "^3.3.2",
     "socks5-http-client": "^1.0.2",
-    "ya-csv": "^0.9.4",
-    "n-readlines": "^0.2.5",
-    "bluebird": "^3.4.1"
+    "sprintf-js": "^1.0.3",
+    "ya-csv": "^0.9.4"
   },
   "keywords": [
     "http",
@@ -38,5 +40,8 @@
     "start": "node bin",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "supports-color": "^5.1.0"
+  }
 }

@@ -19,8 +19,9 @@ var Agent        = require('socks5-http-client/lib/Agent')
 var lineByLine   = require('n-readlines')
 var csv          = require('ya-csv')
 var fuzzer       = require('..')
+const utils      = require('../lib/utils')
 
-
+const dbg = utils.dbg('cli');
 const brute = fuzzer.bruteforce;
 
 const LOGO = '\n\
@@ -106,7 +107,10 @@ function parse_args() {
     "Fuzz tag: " + FUZZ_TAG
   );
 
+  dbg('Passed args:', process.argv)
   var args = getopt.parse(process.argv.slice(2));
+  dbg('Parsed args:', args)
+
   config.url = args.argv[0];
 
   if (args.options.help || !args.argv.length) {
