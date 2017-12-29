@@ -1,0 +1,13 @@
+node_modules
+*.log
+.DS_Store
+.project
+coverage
+*.lock
+*.sublime-*
+.jshintrc
+.jslintrc
+.idea
+
+test
+install

@@ -1,22 +1,31 @@
 {
   "name": "urlfuzz",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "description": "HTTP/S fuzzer",
-  "main": "urlfuzz.js",
   "author": "Daniel Garcia <danigargu[at]gmail.com>",
-  "repository": "",
-  "private": true,
+  "contributors": [
+    "https://github.com/danigargu/urlfuzz/graphs/contributors"
+  ],
+  "bin": {
+    "urlfuzz": "bin/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/danigargu/urlfuzz/urlfuzz.git"
+  },
   "dependencies": {
     "async": "^2.0.0-rc.6",
+    "bluebird": "^3.4.1",
     "colors": "^1.1.2",
+    "debug": "^3.1.0",
+    "event-stream": "^3.3.2",
+    "lodash": "^4.17.4",
+    "n-readlines": "^0.2.5",
     "node-getopt": "^0.2.3",
     "request": "^2.72.0",
-    "sprintf-js": "^1.0.3",
-    "event-stream": "^3.3.2",
     "socks5-http-client": "^1.0.2",
-    "ya-csv": "^0.9.4",
-    "n-readlines": "^0.2.5",
-    "bluebird": "^3.4.1"
+    "sprintf-js": "^1.0.3",
+    "ya-csv": "^0.9.4"
   },
   "keywords": [
     "http",
@@ -28,7 +37,32 @@
     "fast"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node bin",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dep-ok": "depcheck --ignores supports-color",
+    "dep-sec": "nsp check",
+    "dep-old": "ncu",
+    "dep-old-fix": "ncu -u",
+    "lint": "eslint .",
+    "pretest": "npm run lint && npm run dep-ok && npm run dep-sec",
+    "release-major": "npm tst && release-it major",
+    "release-minor": "npm tst && release-it minor",
+    "release-test": "npm tst && release-it -d"
   },
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "depcheck": "^0.6.8",
+    "eslint": "^4.9.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-json": "^1.2.0",
+    "npm-check-updates": "^2.14.0",
+    "nsp": "^3.1.0",
+    "release-it": "^5.1.2",
+    "supports-color": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  }
 }
