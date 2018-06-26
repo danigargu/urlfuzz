@@ -292,7 +292,7 @@ function read_lines(filename, cb) {
 
 function fuzz_iter(cb, end_cb) {
   if (config.bruteforce) 
-    brute.bruteforce(config.bruteforce, cb);
+    brute(config.bruteforce, cb);
   else if (config.wordlist)
     read_wordlist_sync(config.wordlist, cb, end_cb);
   else if (config.range)
@@ -370,7 +370,7 @@ function start_fuzzing() {
   config.http_opts = {
     method: method,
     url: config.url,
-    followRedirect: false,
+    followRedirect: true,
     form: null,
     strictSSL: false,
     proxy: config.proxy,
@@ -534,7 +534,7 @@ function parse_headers(headers) {
 
 try {
   console.log(LOGO.green)
-  console.log(`Version: ${fuzzer.version}\n`)
+  //console.log(`Version: ${fuzzer.version}\n`)
 
   const argsRaw = process.argv.slice(2);
   dbg('Starting ..., args:', argsRaw);
